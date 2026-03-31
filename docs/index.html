@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITSM Survey Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Loading ─────────────────────────────────────────────────────────── -->
+<div id="loading" class="loading-screen">
+  <div class="spinner"></div>
+  <p id="loading-text">Загрузка SQLite…</p>
+</div>
+
+<!-- ── Welcome / startup ────────────────────────────────────────────────── -->
+<div id="welcome" class="modal-overlay hidden">
+  <div class="modal-card welcome-card">
+    <div class="welcome-logo">ITSM Survey Tool</div>
+    <p class="welcome-sub">Инструмент обследования ITSM-процессов · 383 вопроса · ГОСТ Р 57329</p>
+
+    <div class="welcome-actions">
+      <button id="btn-welcome-new" class="btn btn-primary btn-lg">
+        ✨ Начать новое обследование
+      </button>
+
+      <div class="welcome-divider">или</div>
+
+      <label class="btn btn-secondary btn-lg btn-file-label" for="inp-load-db">
+        📂 Продолжить (загрузить файл .db)
+        <input type="file" id="inp-load-db" accept=".db" style="display:none" />
+      </label>
+    </div>
+
+    <div class="welcome-note">
+      <span class="note-icon">💾</span>
+      <span>Все данные хранятся в файле <strong>.db</strong> на вашем компьютере.<br>
+      Скачивайте файл регулярно — он сохраняет весь прогресс.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── App shell ─────────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+
+  <!-- Session modal -->
+  <div id="session-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Сессии обследования</h2>
+      </div>
+      <div id="session-list" class="session-list"></div>
+      <div class="modal-footer" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button id="btn-new-session" class="btn btn-primary">+ Новая сессия</button>
+        <label class="btn btn-secondary btn-file-label" for="inp-load-db-2">
+          📂 Загрузить другой файл .db
+          <input type="file" id="inp-load-db-2" accept=".db" style="display:none" />
+        </label>
+      </div>
+      <div id="new-session-form" class="new-session-form hidden">
+        <input  id="inp-session-name" type="text"  placeholder="Название сессии *" maxlength="120" />
+        <textarea id="inp-session-desc" placeholder="Описание (опционально)" rows="2"></textarea>
+        <div class="form-row">
+          <button id="btn-create-session"     class="btn btn-primary">Создать</button>
+          <button id="btn-cancel-new-session" class="btn btn-ghost">Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header id="header">
+    <div class="hd-left">
+      <span class="logo">ITSM Survey</span>
+      <span id="hd-session-name" class="hd-session"></span>
+    </div>
+    <div class="hd-center" id="hd-progress"></div>
+    <div class="hd-right">
+      <button id="btn-save-db"        class="btn btn-sm btn-save">💾 Сохранить файл</button>
+      <button id="btn-table-view"     class="btn btn-sm btn-outline">📋 Все ответы</button>
+      <button id="btn-export"         class="btn btn-sm btn-outline">⬇ CSV</button>
+      <button id="btn-switch-session" class="btn btn-sm btn-outline">🗂 Сессия</button>
+    </div>
+  </header>
+
+  <!-- Layout -->
+  <div id="layout">
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-filters">
+        <label class="chk-label"><input type="checkbox" id="f-mandatory" /><span>Только обязательные</span></label>
+        <label class="chk-label"><input type="checkbox" id="f-unanswered" /><span>Без ответа</span></label>
+        <label class="chk-label"><input type="checkbox" id="f-review" /><span>На ревью</span></label>
+      </div>
+      <div id="process-list" class="process-list"></div>
+    </aside>
+
+    <!-- Content -->
+    <main id="content">
+
+      <!-- Survey view -->
+      <div id="survey-view">
+        <div id="question-card" class="question-card"></div>
+        <div class="nav-bar">
+          <button id="btn-prev" class="btn btn-secondary">◀ Назад</button>
+          <span id="nav-counter" class="nav-counter"></span>
+          <button id="btn-next" class="btn btn-primary">Вперёд ▶</button>
+        </div>
+      </div>
+
+      <!-- Table view -->
+      <div id="table-view" class="hidden">
+        <div class="table-toolbar">
+          <h2>Все ответы</h2>
+          <button id="btn-back-survey" class="btn btn-secondary">← К опросу</button>
+        </div>
+        <div id="table-container"></div>
+      </div>
+
+    </main>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- Toast -->
+<div id="toast-area"></div>
+
+<!-- sql.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"
+        integrity="sha512-8B+P8EsGjcwUcMDmJVJxuPOXVhVPmaxS2QByBb6MWxpH8LzDFkQHJPIiGbP7j4j5CAGR3wYFbkzEDTFWWBIw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="app.js"></script>
+</body>
+</html>
