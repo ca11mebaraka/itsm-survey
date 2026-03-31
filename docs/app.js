@@ -885,7 +885,7 @@ function bindEvents() {
   // Welcome screen
   document.getElementById("btn-welcome-new").addEventListener("click", () => {
     hideWelcome();
-    // Show session modal (new session form open)
+    document.getElementById("app").classList.remove("hidden");
     showSessionModal();
     document.getElementById("new-session-form").classList.remove("hidden");
     document.getElementById("inp-session-name").focus();
